@@ -1,86 +1,119 @@
-import { useState } from "react";
-import { tracks } from "./data/tracks";
+import { useMemo, useState } from "react";
 import "./App.css";
+import { tracks } from "./data/tracks";
 
 function App() {
   const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("title");
 
-  const filteredTracks = tracks.filter((track) => {
-    const text = `
-      ${track.title}
-      ${track.artist}
-      ${track.album}
-    `.toLowerCase();
+  const filteredTracks = useMemo(() => {
+    const query = search.toLowerCase().trim();
 
-    return text.includes(search.toLowerCase());
-  });
+    const result = tracks.filter((track) => {
+      if (!query) {
+        return true;
+      }
+
+      return (
+        track.title.toLowerCase().includes(query) ||
+        track.artist.toLowerCase().includes(query) ||
+        track.album.toLowerCase().includes(query)
+      );
+    });
+
+    return [...result].sort((a, b) => {
+      if (sortBy === "artist") {
+        return a.artist.localeCompare(b.artist);
+      }
+
+      if (sortBy === "album") {
+        return a.album.localeCompare(b.album);
+      }
+
+      return a.title.localeCompare(b.title);
+    });
+  }, [search, sortBy]);
 
   return (
     <div className="app">
-
-      <header>
-        <h1>🎵 My Music Analyzer</h1>
-
-        <p>
-          {tracks.length} tracks
-        </p>
-      </header>
-
-      <div className="toolbar">
-
-        <input
-          type="text"
-          placeholder="Search track, artist, album..."
-          value={search}
-          onChange={(event) =>
-            setSearch(event.target.value)
-          }
-        />
-
-      </div>
-
-      <main>
-
-        <div className="track-header">
-          <span>#</span>
-          <span>Track</span>
-          <span>Artist</span>
-          <span>Album</span>
+      <header className="header">
+        <div>
+          <h1>Music Taste</h1>
+          <p>Your music. Your taste. Your ranking.</p>
         </div>
 
-        {filteredTracks.map((track) => (
-          <div
-            className="track"
-            key={track.id}
+        <div className="track-count">
+          <strong>{tracks.length}</strong>
+          <span>tracks</span>
+        </div>
+      </header>
+
+      <main className="main">
+        <section className="controls">
+          <input
+            type="search"
+            placeholder="Search tracks, artists or albums..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+
+          <select
+            value={sortBy}
+            onChange={(event) => setSortBy(event.target.value)}
           >
+            <option value="title">Sort by title</option>
+            <option value="artist">Sort by artist</option>
+            <option value="album">Sort by album</option>
+          </select>
+        </section>
+
+        <section className="library">
+          <div className="library-header">
+            <h2>My Library</h2>
 
             <span>
-              {track.id}
+              {filteredTracks.length} of {tracks.length}
             </span>
-
-            <span>
-              <a
-                href={track.url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {track.title}
-              </a>
-            </span>
-
-            <span>
-              {track.artist}
-            </span>
-
-            <span>
-              {track.album}
-            </span>
-
           </div>
-        ))}
 
+          <div className="track-list">
+            {filteredTracks.map((track, index) => (
+              <article className="track" key={track.id}>
+                <div className="track-number">
+                  {index + 1}
+                </div>
+
+                <div className="track-info">
+                  <h3>{track.title}</h3>
+
+                  <p>
+                    {track.artist}
+                    {track.album && ` • ${track.album}`}
+                  </p>
+                </div>
+
+                {track.spotifyUrl && (
+                  <a
+                    className="spotify-link"
+                    href={track.spotifyUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Spotify
+                  </a>
+                )}
+              </article>
+            ))}
+          </div>
+
+          {filteredTracks.length === 0 && (
+            <div className="empty">
+              <h3>No tracks found</h3>
+              <p>Try another search.</p>
+            </div>
+          )}
+        </section>
       </main>
-
     </div>
   );
 }

@@ -1,12 +1,11 @@
-// src/data/tracks.js
-
 export const tracks = [
   {
     id: 1,
     title: "Crazy In Love (feat. JAY-Z)",
-    artist: "Beyoncé, JAŸ-Z",
+    artist: "Beyoncé, JAY-Z",
     album: "Dangerously In Love",
-    url: "https://open.spotify.com/track/5IVuqXILoxVWvWEPm82Jxr",
+    spotifyUrl:
+      "https://open.spotify.com/track/5IVuqXILoxVWvWEPm82Jxr",
   },
 
   {
@@ -14,7 +13,8 @@ export const tracks = [
     title: "Тихо плакала",
     artist: "YAKTAK, NICHKA",
     album: "Тихо плакала",
-    url: "https://open.spotify.com/track/6ibwdsZYpjujdfv4e59MVB",
+    spotifyUrl:
+      "https://open.spotify.com/track/6ibwdsZYpjujdfv4e59MVB",
   },
 
   {
@@ -22,6 +22,15 @@ export const tracks = [
     title: "Небо",
     artist: "YAKTAK, CKAYA",
     album: "Небо",
-    url: "https://open.spotify.com/track/6qxRYfQXoVRLNZ5714TWiC",
+    spotifyUrl:
+      "https://open.spotify.com/track/6qxRYfQXoVRLNZ5714TWiC",
+  },
+
+  {
+    id: 4,
+    title: "Dream On",
+    artist: "Aerosmith",
+    album: "Aerosmith",
+    spotifyUrl: "",
   },
 ];
