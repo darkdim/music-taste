@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #121212;
+  color: white;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+header {
+  margin-bottom: 30px;
+}
+
+header h1 {
+  margin-bottom: 5px;
+}
+
+header p {
+  color: #aaa;
+}
+
+.toolbar {
+  margin-bottom: 20px;
+}
+
+.toolbar input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #222;
+  color: white;
+  font-size: 16px;
+}
+
+.track-header,
+.track {
+  display: grid;
+  grid-template-columns:
+    50px
+    2fr
+    1.5fr
+    1.5fr;
+
+  gap: 15px;
+
+  align-items: center;
+}
+
+.track-header {
+  padding: 12px 15px;
+  color: #888;
+  border-bottom: 1px solid #333;
+}
+
+.track {
+  padding: 14px 15px;
+  border-bottom: 1px solid #222;
+}
+
+.track:hover {
+  background: #1f1f1f;
+}
+
+.track a {
+  color: white;
+  text-decoration: none;
+}
+
+.track a:hover {
+  text-decoration: underline;
+}
