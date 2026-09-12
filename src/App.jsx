@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Stats from "./components/Stats";
 import Controls from "./components/Controls";
 import TrackList from "./components/TrackList";
+import ViewTabs from "./components/ViewTabs";
 
 import { useRatings } from "./hooks/useRatings";
 
@@ -15,6 +16,7 @@ function App() {
   const [search, setSearch] = useState("");
   const [artist, setArtist] = useState("all");
   const [sortBy, setSortBy] = useState("title");
+  const [view, setView] = useState("all");
 
   const {
     ratings,
@@ -29,10 +31,10 @@ function App() {
     )].sort((a, b) => a.localeCompare(b));
   }, []);
 
-  const filteredTracks = useMemo(() => {
+  const visibleTracks = useMemo(() => {
     const query = search.toLowerCase().trim();
 
-    const result = tracks.filter((track) => {
+    let result = tracks.filter((track) => {
       const matchesSearch =
         !query ||
         track.title.toLowerCase().includes(query) ||
@@ -46,30 +48,68 @@ function App() {
       return matchesSearch && matchesArtist;
     });
 
-    return [...result].sort((a, b) => {
-      if (sortBy === "title") {
-        return a.title.localeCompare(b.title);
-      }
+    if (view === "rated") {
+      result = result.filter(
+        (track) => ratings[track.id]
+      );
+    }
 
-      if (sortBy === "artist") {
-        return a.artist.localeCompare(b.artist);
-      }
+    if (view === "unrated") {
+      result = result.filter(
+        (track) => !ratings[track.id]
+      );
+    }
 
-      if (sortBy === "rating") {
+    if (view === "top100") {
+      return result
+        .filter((track) => ratings[track.id])
+        .sort((a, b) => {
+          const ratingA = ratings[a.id] || 0;
+          const ratingB = ratings[b.id] || 0;
+
+          return ratingB - ratingA;
+        })
+        .slice(0, 100);
+    }
+
+    if (sortBy === "title") {
+      result.sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+    }
+
+    if (sortBy === "artist") {
+      result.sort((a, b) =>
+        a.artist.localeCompare(b.artist)
+      );
+    }
+
+    if (sortBy === "rating") {
+      result.sort((a, b) => {
         const ratingA = ratings[a.id] || 0;
         const ratingB = ratings[b.id] || 0;
 
         return ratingB - ratingA;
-      }
+      });
+    }
 
-      return 0;
-    });
+    return result;
   }, [
     search,
     artist,
     sortBy,
+    view,
     ratings,
   ]);
+
+  const ratedCount = Object.keys(ratings).length;
+
+  const viewCounts = {
+    all: tracks.length,
+    rated: ratedCount,
+    unrated: tracks.length - ratedCount,
+    top100: Math.min(ratedCount, 100),
+  };
 
   return (
     <div className="app">
@@ -93,13 +133,18 @@ function App() {
           artists={artists}
         />
 
+        <ViewTabs
+          view={view}
+          setView={setView}
+          counts={viewCounts}
+        />
+
         <div className="result-info">
-          Showing {filteredTracks.length} of{" "}
-          {tracks.length} tracks
+          Showing {visibleTracks.length} of {tracks.length} tracks
         </div>
 
         <TrackList
-          tracks={filteredTracks}
+          tracks={visibleTracks}
           ratings={ratings}
           onRatingChange={setRating}
         />
