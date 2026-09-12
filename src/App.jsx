@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { tracks } from "./data/tracks";
 
@@ -7,6 +7,8 @@ import Stats from "./components/Stats";
 import Controls from "./components/Controls";
 import TrackList from "./components/TrackList";
 
+import { useRatings } from "./hooks/useRatings";
+
 import "./App.css";
 
 function App() {
@@ -14,20 +16,12 @@ function App() {
   const [artist, setArtist] = useState("all");
   const [sortBy, setSortBy] = useState("title");
 
-  const [ratings, setRatings] = useState(() => {
-    const saved = localStorage.getItem(
-      "music-taste-ratings"
-    );
-
-    return saved ? JSON.parse(saved) : {};
-  });
-
-  useEffect(() => {
-    localStorage.setItem(
-      "music-taste-ratings",
-      JSON.stringify(ratings)
-    );
-  }, [ratings]);
+  const {
+    ratings,
+    setRating,
+    ratedTracks,
+    averageRating,
+  } = useRatings();
 
   const artists = useMemo(() => {
     return [...new Set(
@@ -62,34 +56,20 @@ function App() {
       }
 
       if (sortBy === "rating") {
-        return (
-          (ratings[b.id] || 0) -
-          (ratings[a.id] || 0)
-        );
+        const ratingA = ratings[a.id] || 0;
+        const ratingB = ratings[b.id] || 0;
+
+        return ratingB - ratingA;
       }
 
       return 0;
     });
-  }, [search, artist, sortBy, ratings]);
-
-  function setRating(trackId, rating) {
-    setRatings((prev) => ({
-      ...prev,
-      [trackId]: rating,
-    }));
-  }
-
-  const ratedTracks = Object.keys(ratings).length;
-
-  const averageRating =
-    ratedTracks > 0
-      ? (
-        Object.values(ratings).reduce(
-          (sum, rating) => sum + rating,
-          0
-        ) / ratedTracks
-      ).toFixed(1)
-      : "—";
+  }, [
+    search,
+    artist,
+    sortBy,
+    ratings,
+  ]);
 
   return (
     <div className="app">
