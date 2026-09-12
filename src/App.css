@@ -505,3 +505,17 @@ select {
   opacity: 0.3;
   cursor: default;
 }
+
+.quick-rating-done {
+  margin-top: 30px;
+  padding: 12px 20px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #1b1b1b;
+  color: #fff;
+  cursor: pointer;
+}
+
+.quick-rating-done:hover {
+  background: #292929;
+}
