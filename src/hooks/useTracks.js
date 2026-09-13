@@ -43,18 +43,6 @@ export function useTracks({
       );
     }
 
-    if (view === "top100") {
-      return [...result]
-        .filter((track) => ratings[track.id])
-        .sort((a, b) => {
-          const ratingA = ratings[a.id] || 0;
-          const ratingB = ratings[b.id] || 0;
-
-          return ratingB - ratingA;
-        })
-        .slice(0, 100);
-    }
-
     return [...result].sort((a, b) => {
       if (sortBy === "title") {
         return a.title.localeCompare(b.title);
