@@ -11,6 +11,7 @@ import QuickRating from "./components/QuickRating";
 
 import { useRatings } from "./hooks/useRatings";
 import { useTracks } from "./hooks/useTracks";
+import { useRanking } from "./hooks/useRanking";
 
 import "./App.css";
 
@@ -38,6 +39,14 @@ function App() {
     artist,
     sortBy,
     view,
+    ratings,
+  });
+
+  const {
+    rankedTracks,
+    top100,
+  } = useRanking({
+    tracks,
     ratings,
   });
 
@@ -90,7 +99,7 @@ function App() {
         </div>
 
         <TrackList
-          tracks={filteredTracks}
+          tracks={view === "top100" ? top100 : filteredTracks}
           ratings={ratings}
           onRatingChange={setRating}
         />
