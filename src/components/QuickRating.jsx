@@ -3,6 +3,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Shuffle,
+  SkipForward,
   Star,
   X,
 } from "lucide-react";
@@ -41,6 +42,12 @@ function QuickRating({
     setCurrentIndex((index) =>
       Math.min(index + 1, queue.length - 1)
     );
+  }
+
+  function skip() {
+    if (currentIndex < queue.length - 1) {
+      setCurrentIndex((index) => index + 1);
+    }
   }
 
   function goPrevious() {
@@ -83,6 +90,11 @@ function QuickRating({
 
       if (event.key.toLowerCase() === "s") {
         shuffleQueue();
+      }
+
+      if (event.code === "Space") {
+        event.preventDefault();
+        skip();
       }
     }
 
@@ -186,6 +198,7 @@ function QuickRating({
 
         <div className="quick-rating-hint">
           <span>1–5 rate</span>
+          <span>Space skip</span>
           <span>← → navigate</span>
           <span>S shuffle</span>
           <span>Esc close</span>
@@ -199,6 +212,11 @@ function QuickRating({
         >
           <ChevronLeft size={20} />
           Previous
+        </button>
+
+        <button onClick={skip}>
+          <SkipForward size={18} />
+          Skip
         </button>
 
         <button onClick={shuffleQueue}>
