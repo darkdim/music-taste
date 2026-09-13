@@ -519,3 +519,20 @@ select {
 .quick-rating-done:hover {
   background: #292929;
 }
+.track-number {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 50px;
+}
+
+.track-rank {
+  font-size: 16px;
+  color: #fff;
+}
+
+.track-id {
+  margin-top: 3px;
+  color: #555;
+  font-size: 11px;
+}
