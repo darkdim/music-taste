@@ -1,11 +1,17 @@
 import { ExternalLink } from "lucide-react";
 import Rating from "./Rating";
 
-function TrackRow({ track, rating, onRatingChange }) {
+function TrackRow({
+  track,
+  rank,
+  rating,
+  onRatingChange,
+}) {
   return (
     <article className="track">
       <div className="track-number">
-        {track.id}
+        <span className="track-rank">{rank}</span>
+        <span className="track-id">#{track.id}</span>
       </div>
 
       <div className="track-info">
