@@ -3,6 +3,7 @@ function Stats({
   artistCount,
   ratedCount,
   averageRating,
+  comparisonCount,
 }) {
   return (
     <section className="stats">
@@ -24,6 +25,11 @@ function Stats({
       <div className="stat">
         <span className="stat-number">{averageRating}</span>
         <span className="stat-label">Average rating</span>
+      </div>
+
+      <div className="stat">
+        <span className="stat-number">{comparisonCount}</span>
+        <span className="stat-label">Comparisons</span>
       </div>
     </section>
   );
